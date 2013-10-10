@@ -7,8 +7,11 @@
 <div class="row-fluid">
     <div class="span12">
         <div class="span8">
-            <input type="button" class="btn btn-success btn-small pull-left" data-bind="click: addNew"
+            <input type="button" class="btn btn-success btn-small" data-bind="click: addNew"
                 value="Add New" />
+            <input type="button" class="btn btn-success btn-small"
+                data-bind="click: sort, visible: users().length > 0"
+                value="Sort by Name" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
@@ -147,8 +150,17 @@
 
                         promise1.done(function (data) {
                             pushData(data);
+                            sort();
                         });
 
+                    },
+                    sort = function () {
+                        users.sort(
+                            function (left, right) {
+                                return left.lastName().toLowerCase() == right.lastName().toLowerCase()
+                                    ? 0 : left.lastName().toLowerCase() < right.lastName().toLowerCase() ? -1 : 1;
+                            }
+                        );
                     },
                     removeUser = function (user) {
                         users.remove(user);
@@ -204,10 +216,12 @@
                     },
                     submitAdd = function (formElement) {
                         pushUser();
+                        sort();
                         isAdding(false);
                     },
                     submitAndAddNew = function (formElement) {
                         pushUser();
+                        sort();
                         addNew();
                     };
 
@@ -215,6 +229,7 @@
                     users: users,
                     isAdding: isAdding,
                     loadUsers: loadUsers,
+                    sort: sort,
                     removeUser: removeUser,
                     addNew: addNew,
                     cancelAdd: cancelAdd,
