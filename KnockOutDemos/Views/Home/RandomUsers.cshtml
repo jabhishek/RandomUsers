@@ -3,87 +3,95 @@
 }
 
 <h3>Random Users</h3>
-<div data-bind="visible: !isAdding()">
 
-
-    <table class="table table-bordered table-hover table-condensed"
-        
-        style="table-layout: auto">
-        <caption>
+<div class="row-fluid">
+    <div class="span12">
+        <div class="span8">
             <input type="button" class="btn btn-success btn-small pull-left" data-bind="click: addNew"
                 value="Add New" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
                 Users listed</strong>
-
-        </caption>
-        <thead data-bind="visible: users().length > 0">
-            <tr>
-                <th>Gender</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Image</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: users">
-            <tr>
-                <td data-bind="text: gender" class="capitalize"></td>
-                <td data-bind="text: fullName" class="capitalize"></td>
-                <td>
-                    <span data-bind="text: street" class="capitalize"></span>
-                    <br />
-                    <strong>City: </strong><span data-bind="text: city" class="capitalize"></span>
-                    <br />
-                    <strong>Zip: </strong><span data-bind="text: zip" class="capitalize"></span>
-                    <br />
-                    <strong>State: </strong><span data-bind="text: state" class="capitalize"></span>
-                </td>
-                <td class="imagetd">
-                    <img data-bind="attr: { src: imageUrl }"
-                        style="max-width: 20%; min-width: 100px" />
-                </td>
-                <td>
-                    <button data-bind="click: $root.removeUser">
-                        <i class="icon-remove"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        </div>
+        <div style="clear: both"></div>
+    </div>
 </div>
-<div data-bind="visible: isAdding">
-    <div class="well well-small" id="addUserForm">
-        <form data-bind="submit: submitAdd">
+<div class="row-fluid">
+    <div class="span8">
+        <table class="table table-bordered table-hover table-condensed"
+            style="table-layout: auto">
+            <thead data-bind="visible: users().length > 0">
+                <tr>
+                    <th>Gender</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Image</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: users">
+                <tr>
+                    <td data-bind="text: gender" class="capitalize"></td>
+                    <td data-bind="text: fullName" class="capitalize"></td>
+                    <td>
+                        <span data-bind="text: street" class="capitalize"></span>
+                        <br />
+                        <strong>City: </strong><span data-bind="text: city" class="capitalize"></span>
+                        <br />
+                        <strong>Zip: </strong><span data-bind="text: zip" class="capitalize"></span>
+                        <br />
+                        <strong>State: </strong><span data-bind="text: state" class="capitalize"></span>
+                    </td>
+                    <td class="imagetd">
+                        <img data-bind="attr: { src: imageUrl }"
+                            style="max-width: 20%; min-width: 100px" />
+                    </td>
+                    <td>
+                        <button data-bind="click: $root.removeUser">
+                            <i class="icon-remove"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span4" data-bind="visible: isAdding">
+        <div class="well well-small" id="addUserForm">
+            <form data-bind="submit: submitAdd">
 
-            <h4>Add New User</h4>
-            Gender:<select id="gender">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select><br />
-            Title:<input type="text" id="title" /><br />
-            First Name:<input type="text" id="first" /><br />
-            Last Name:<input type="text" id="last" /><br />
-            <fieldset>
-                <legend>Address</legend>
-                Street:
-            <input type="text" id="street" /><br />
-                City:
-            <input type="text" id="city" /><br />
-                Zip:
-            <input type="text" id="zip" /><br />
-                State:
-            <input type="text" id="state" /><br />
-            </fieldset>
-            Image Url:<input type="text" id="image" /><br />
-            <input type="submit" value="Submit" />
-            <button value="Submit And Add More" data-bind="click: submitAndAddNew">
-                Submit And Add
-            New</button>
-            <button value="Cancel" data-bind="click: cancelAdd">Cancel</button>
+                <fieldset>
+                    <legend>Add New User</legend>
 
-        </form>
+
+                    <h4></h4>
+                    Gender:<select id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select><br />
+                    Title:<input type="text" id="title" /><br />
+                    First Name:<input type="text" id="first" /><br />
+                    Last Name:<input type="text" id="last" /><br />
+                    <fieldset>
+                        <legend>Address</legend>
+                        Street:
+                    <input type="text" id="street" /><br />
+                        City:
+                    <input type="text" id="city" /><br />
+                        Zip:
+                    <input type="text" id="zip" /><br />
+                        State:
+                    <input type="text" id="state" /><br />
+                    </fieldset>
+                    Image Url:<input type="text" id="image" /><br />
+                    <input type="submit" value="Submit" />
+                    <button value="Submit And Add More" data-bind="click: submitAndAddNew">
+                        Submit And Add
+                    New</button>
+                    <button value="Cancel" data-bind="click: cancelAdd">Cancel</button>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 @section scripts
