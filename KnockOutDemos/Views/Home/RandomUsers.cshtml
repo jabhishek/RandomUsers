@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "Random Users";
+}
+
+<h3>Random Users</h3>
+<div data-bind="visible: !isAdding()">
+
+
+    <table class="table table-bordered table-hover table-condensed"
+        
+        style="table-layout: auto">
+        <caption>
+            <input type="button" class="btn btn-success btn-small pull-left" data-bind="click: addNew"
+                value="Add New" />
+            <strong class="pull-right">
+                <!--ko text: users().length-->
+                <!--/ko-->
+                Users listed</strong>
+
+        </caption>
+        <thead data-bind="visible: users().length > 0">
+            <tr>
+                <th>Gender</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Image</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: users">
+            <tr>
+                <td data-bind="text: gender" class="capitalize"></td>
+                <td data-bind="text: fullName" class="capitalize"></td>
+                <td>
+                    <span data-bind="text: street" class="capitalize"></span>
+                    <br />
+                    <strong>City: </strong><span data-bind="text: city" class="capitalize"></span>
+                    <br />
+                    <strong>Zip: </strong><span data-bind="text: zip" class="capitalize"></span>
+                    <br />
+                    <strong>State: </strong><span data-bind="text: state" class="capitalize"></span>
+                </td>
+                <td class="imagetd">
+                    <img data-bind="attr: { src: imageUrl }"
+                        style="max-width: 20%; min-width: 100px" />
+                </td>
+                <td>
+                    <button data-bind="click: $root.removeUser">
+                        <i class="icon-remove"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div data-bind="visible: isAdding">
+    <div class="well well-small" id="addUserForm">
+        <form data-bind="submit: submitAdd">
+
+            <h4>Add New User</h4>
+            Gender:<select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select><br />
+            Title:<input type="text" id="title" /><br />
+            First Name:<input type="text" id="first" /><br />
+            Last Name:<input type="text" id="last" /><br />
+            <fieldset>
+                <legend>Address</legend>
+                Street:
+            <input type="text" id="street" /><br />
+                City:
+            <input type="text" id="city" /><br />
+                Zip:
+            <input type="text" id="zip" /><br />
+                State:
+            <input type="text" id="state" /><br />
+            </fieldset>
+            Image Url:<input type="text" id="image" /><br />
+            <input type="submit" value="Submit" />
+            <button value="Submit And Add More" data-bind="click: submitAndAddNew">
+                Submit And Add
+            New</button>
+            <button value="Cancel" data-bind="click: cancelAdd">Cancel</button>
+
+        </form>
+    </div>
+</div>
+@section scripts
+{
+    <script>
+
+        $(function () {
+            var my = {};
+
+            my.user = function () {
+                var self = this;
+                self.gender = ko.observable();
+                self.title = ko.observable();
+                self.firstName = ko.observable();
+                self.lastName = ko.observable();
+                self.imageUrl = ko.observable();
+                self.street = ko.observable();
+                self.city = ko.observable();
+                self.street = ko.observable();
+                self.state = ko.observable();
+                self.zip = ko.observable();
+                self.fullName = ko.computed(function () {
+                    return self.title() + " " + self.firstName() + " " + self.lastName();
+                });
+            };
+
+            // The ViewModel
+            my.vm = function () {
+                var users = ko.observableArray([]),
+                    isAdding = ko.observable(false),
+                    loadUsers = function () {
+
+                        var promise1 = $.ajax({
+                            url: 'http://api.randomuser.me/?results=50&seed=efgh',
+                            dataType: 'json'
+                        });
+
+                        var pushData = function (data) {
+                            $.each(data.results, function (i, p) {
+                                users.push(new my.user()
+                                    .gender(p.user.gender)
+                                    .title(p.user.name.title)
+                                    .firstName(p.user.name.first)
+                                    .lastName(p.user.name.last)
+                                    .imageUrl(p.user.picture)
+                                    .street(p.user.location.street)
+                                    .city(p.user.location.city)
+                                    .state(p.user.location.state)
+                                    .zip(p.user.location.zip)
+                                );
+                            });
+                        };
+
+                        promise1.done(function (data) {
+                            pushData(data);
+                        });
+
+                    },
+                    removeUser = function (user) {
+                        users.remove(user);
+                    },
+                    addNew = function () {
+                        var promise1 = $.ajax({
+                            url: 'http://api.randomuser.me/',
+                            dataType: 'json'
+                        });
+
+                        promise1.done(function (data) {
+                            var user = data.results[0].user;
+                            var $formElement = $('#addUserForm');
+                            $formElement.find('#title').val(user.name.title);
+                            $formElement.find('#first').val(user.name.first);
+                            $formElement.find('#last').val(user.name.last);
+                            $formElement.find('#image').val(user.picture);
+                            $formElement.find('#gender').val(user.gender);
+                            $formElement.find('#city').val(user.location.city);
+                            $formElement.find('#zip').val(user.location.zip);
+                            $formElement.find('#state').val(user.location.state);
+                            $formElement.find('#street').val(user.location.street);
+                        });
+
+                        isAdding(true);
+                    },
+                    pushUser = function () {
+                        var $formElement = $('#addUserForm');
+                        var title = $formElement.find('#title').val();
+                        var name = $formElement.find('#first').val();
+                        var last = $formElement.find('#last').val();
+                        var gender = $formElement.find('#gender').val();
+                        var street = $formElement.find('#street').val();
+                        var state = $formElement.find('#state').val();
+                        var zip = $formElement.find('#zip').val();
+                        var city = $formElement.find('#city').val();
+                        var imageUrl = $formElement.find('#image').val();
+
+                        users.push(new my.user()
+                                    .gender(gender)
+                                    .title(title)
+                                    .firstName(name)
+                                    .lastName(last)
+                                    .imageUrl(imageUrl)
+                                    .street(street)
+                                    .city(city)
+                                    .state(state)
+                                    .zip(zip)
+                                );
+                    },
+                    cancelAdd = function (formElement) {
+                        isAdding(false);
+                    },
+                    submitAdd = function (formElement) {
+                        pushUser();
+                        isAdding(false);
+                    },
+                    submitAndAddNew = function (formElement) {
+                        pushUser();
+                        addNew();
+                    };
+
+                return {
+                    users: users,
+                    isAdding: isAdding,
+                    loadUsers: loadUsers,
+                    removeUser: removeUser,
+                    addNew: addNew,
+                    cancelAdd: cancelAdd,
+                    submitAdd: submitAdd,
+                    submitAndAddNew: submitAndAddNew
+                };
+            }();
+
+            my.vm.loadUsers();
+            ko.applyBindings(my.vm);
+        });
+    </script>
+
+}

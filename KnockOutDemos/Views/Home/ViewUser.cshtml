@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "HelloWorld";
+}
+@section loader
+{
+    <div id="loaderBg">
+        <div id='loader'>
+            <div class='circle' id='loaderBall'></div>
+            <div class='circle' id='loaderBall1'></div>
+            <div class='circle' id='loaderBall2'></div>
+            <div class='circle' id='loaderBall3'></div>
+            <div class='circle' id='loaderBall4'></div>
+            <div class='circle' id='loaderBall5'></div>
+            <div class='circle' id='loaderBall6'></div>
+        </div>
+    </div>
+}
+
+<h4><span data-bind="text: users().length"></span> Users</h4>
+
+<table class="table table-bordered table-hover table-condensed" 
+    data-bind="visible: users().length > 0"   
+    style="table-layout: auto">
+    <thead>
+        <tr>
+            <th>Gender</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Image</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: users">
+        <tr>
+            <td data-bind="text: gender" class="capitalize"></td>
+            <td data-bind="text: fullName" class="capitalize"></td>
+            <td>
+                <span data-bind="text: street" class="capitalize"></span><br/>
+                <strong>City: </strong><span data-bind="text: city" class="capitalize"></span><br/>
+                <strong>Zip: </strong> <span data-bind="text: zip" class="capitalize"></span><br/>
+                <strong>State: </strong><span data-bind="text: state" class="capitalize"></span>
+            </td>
+            <td class="imagetd">
+                <img data-bind="attr: { src: imageUrl }"
+                    style="max-width: 20%; min-width: 100px" />
+            </td>
+            <td>
+                <button data-bind="click: remove">
+                    <i class="icon-remove"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+@section scripts
+{
+    <script>
+
+        var my = {};
+        my.dataService = function () {
+
+            function getData() {
+                return $.ajax({
+                    url: 'http://api.randomuser.me/?results=50',
+                    dataType: 'json'
+                });
+            }
+
+            return {
+                getData: getData
+            };
+
+        }();
+
+        my.binddata = function (model) {
+            
+            var User = function () {
+                this.gender = ko.observable();
+                this.title = ko.observable();
+                this.firstName = ko.observable();
+                this.lastName = ko.observable();
+                this.imageUrl = ko.observable();
+                this.street = ko.observable();
+                this.city = ko.observable();
+                this.street = ko.observable();
+                this.state = ko.observable();
+                this.zip = ko.observable();
+                this.fullName = ko.computed(function () {
+                    return this.title() + " " + this.firstName() + " " + this.lastName();
+                }, this);
+                this.remove = function () {
+                    vm.users.remove(this);
+                };
+            };
+
+            var vm = {
+                users: ko.observableArray([]),
+
+                load: function () {
+                    $.each(model, function (i, p) {
+                        vm.users.push(new User()
+    	                        .gender(p.user.gender)
+    	                        .title(p.user.name.title)
+    	                        .firstName(p.user.name.first)
+    	                        .lastName(p.user.name.last)
+    	                        .imageUrl(p.user.picture)
+    	                        .street(p.user.location.street)
+    	                        .city(p.user.location.city)
+    	                        .state(p.user.location.state)
+    	                        .zip(p.user.location.zip)
+	                    );
+                    });
+                }
+
+            };
+            vm.load();
+            ko.applyBindings(vm);
+            $('#loaderBg').fadeOut();
+
+        };
+
+        $(function () {
+            $('#loaderBg').fadeIn();
+            var model = {};
+            my.dataService.getData()
+                .done(function (data) {
+                    if (data.results) {
+                        model = data.results;
+                        my.binddata(model);
+                    }
+                });
+        });
+
+    </script>
+}

@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "HelloWorld";
+}
+@section loader
+{
+    <div id="loaderBg">
+        <div id='loader'>
+            <div class='circle' id='loaderBall'></div>
+            <div class='circle' id='loaderBall1'></div>
+            <div class='circle' id='loaderBall2'></div>
+            <div class='circle' id='loaderBall3'></div>
+            <div class='circle' id='loaderBall4'></div>
+            <div class='circle' id='loaderBall5'></div>
+            <div class='circle' id='loaderBall6'></div>
+        </div>
+    </div>
+}
+
+<h4>List of Users</h4>
+<div class="well well-small inline-block">
+    <div class="userInfo row-fluid">
+        <div class="span6">
+            <span class="input-medium" data-bind="text: user.fullName"
+                style="text-transform: capitalize"></span>
+            <br />
+            City: <span class="input-medium" data-bind="text: user.address.city"
+                style="text-transform: capitalize"></span>
+        </div>
+        <div class="offset2 span4">
+            <img data-bind="attr: { src: user.imageUrl }"/>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+
+        var my = {};
+        my.dataService = function () {
+
+            function getData() {
+                return $.ajax({
+                    url: 'http://api.randomuser.me/?results=5',
+                    dataType: 'json'
+                });
+            }
+
+            return {
+                getData: getData
+            };
+
+        }();
+
+        var user = function() {
+
+        };
+
+        my.binddata = function (model) {
+            var vm = {
+                user: {
+                    firstName: ko.observable(model.user.name.first),
+                    lastName: ko.observable(model.user.name.last),
+                    imageUrl: ko.observable(model.user.picture),
+                    address: {
+                        street: ko.observable(model.user.location.street),
+                        city: ko.observable(model.user.location.city),
+                        state: ko.observable(model.user.location.state),
+                        zip: ko.observable(model.user.location.zip)
+                    }
+                }
+            };
+
+            vm.user.fullName = ko.computed(function () {
+                return this.firstName() + " " + this.lastName();
+            }, vm.user);
+
+            ko.applyBindings(vm);
+            $('#loaderBg').fadeOut();
+
+        };
+
+        $(function () {
+            $('#loaderBg').fadeIn();
+            var model = {};
+            my.dataService.getData()
+                .done(function (data) {
+                    if (data.results) {
+                        model = data.results[0];
+                        my.binddata(model);
+                    }
+                });
+        });
+
+    </script>
+}
+
+
+
+@*
+{
+  results: [{
+    user: {
+      gender: "female",
+      name: {
+        title: "ms",
+        first: "amanda",
+        last: "jones"
+      },
+      location: {
+        street: "7159 edwards rd",
+        city: "seymour",
+        state: "pennsylvania",
+        zip: "37284"
+      },
+        email: "amanda.jones40@example.com",
+        password: "godfather",
+        md5 hash: "15d628391f0eb58d7724041ab9a12ae2",
+        sha1 hash: "58be9e2c7f22cd75d7af3c9e175b6465b280d61d",
+        phone: "(471)-543-4073",
+        cell: "(651)-308-4754",
+        SSN: "160-76-1677",
+        picture: "http://api.randomuser.me/0.2/portraits/women/25.jpg"
+      },
+      seed: "heavyFish"
+    }]
+}*@

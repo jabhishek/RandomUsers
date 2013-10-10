@@ -1,0 +1,230 @@
+﻿#loaderBg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #aaaaaa;
+}
+#loader {
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+}
+#loader .circle {
+  background: rgba(138, 138, 255, 0.8);
+  width: 16px;
+  height: 16px;
+  border-radius: 50px;
+  display: inline-block;
+  margin: 2px;
+}
+#loader #loaderBall {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 500ms;
+  -o-animation-duration: 500ms;
+  -webkit-animation-duration: 500ms;
+  animation-duration: 500ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall1 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 550ms;
+  -o-animation-duration: 550ms;
+  -webkit-animation-duration: 550ms;
+  animation-duration: 550ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall2 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 600ms;
+  -o-animation-duration: 600ms;
+  -webkit-animation-duration: 600ms;
+  animation-duration: 600ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall3 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 650ms;
+  -o-animation-duration: 650ms;
+  -webkit-animation-duration: 650ms;
+  animation-duration: 650ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall4 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 700ms;
+  -o-animation-duration: 700ms;
+  -webkit-animation-duration: 700ms;
+  animation-duration: 700ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall5 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 750ms;
+  -o-animation-duration: 750ms;
+  -webkit-animation-duration: 750ms;
+  animation-duration: 750ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+#loader #loaderBall6 {
+  -moz-animation-name: 'animation-1';
+  -o-animation-name: 'animation-1';
+  -webkit-animation-name: 'animation-1';
+  animation-name: 'animation-1';
+  -moz-animation-duration: 800ms;
+  -o-animation-duration: 800ms;
+  -webkit-animation-duration: 800ms;
+  animation-duration: 800ms;
+  -moz-animation-delay: 0;
+  -o-animation-delay: 0;
+  -webkit-animation-delay: 0;
+  animation-delay: 0;
+  -moz-animation-timing-function: ease;
+  -o-animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+  animation-timing-function: ease;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -moz-animation-direction: alternate;
+  -o-animation-direction: alternate;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
+@-moz-keyframes animation-1 {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+@-webkit-keyframes animation-1 {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+@keyframes animation-1 {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.3;
+  }
+}

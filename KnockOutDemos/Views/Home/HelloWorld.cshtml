@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "HelloWorld";
+}
+
+<div class="well well-small row-fluid">
+    <span class="input-medium" data-bind="text: firstName" style="text-transform: capitalize">
+    </span>
+    <span class="input-medium" data-bind="text: lastName" style="text-transform: capitalize">
+    </span>
+</div>
+@section scripts
+{
+    <script>
+
+        var dataService = function () {
+
+            function getData() {
+                return $.ajax({
+                    url: 'http://api.randomuser.me/?results=5',
+                    dataType: 'json'
+                });
+            }
+
+            return {
+                getData: getData
+            };
+
+        }();
+
+
+        var model = {};
+        dataService.getData()
+            .done(function (data) {
+                if (data.results) {
+                    model = data.results[0];
+                    var vm = {
+                        firstName: ko.observable(model.user.name.first),
+                        lastName: ko.observable(model.user.name.last)
+                    };
+                    ko.applyBindings(vm);
+                }
+            });
+
+    </script>
+}
+
+
+
+@*
+{
+  results: [{
+    user: {
+      gender: "female",
+      name: {
+        title: "ms",
+        first: "amanda",
+        last: "jones"
+      },
+      location: {
+        street: "7159 edwards rd",
+        city: "seymour",
+        state: "pennsylvania",
+        zip: "37284"
+      },
+        email: "amanda.jones40@example.com",
+        password: "godfather",
+        md5 hash: "15d628391f0eb58d7724041ab9a12ae2",
+        sha1 hash: "58be9e2c7f22cd75d7af3c9e175b6465b280d61d",
+        phone: "(471)-543-4073",
+        cell: "(651)-308-4754",
+        SSN: "160-76-1677",
+        picture: "http://api.randomuser.me/0.2/portraits/women/25.jpg"
+      },
+      seed: "heavyFish"
+    }]
+}*@
