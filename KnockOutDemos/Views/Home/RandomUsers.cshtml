@@ -128,8 +128,9 @@
                     loadUsers = function () {
 
                         var promise1 = $.ajax({
-                            url: 'http://api.randomuser.me/?results=50&seed=efgh',
-                            dataType: 'json'
+                            url: 'http://api.randomuser.me/?results=5',
+                            dataType: 'json',
+                            cache: false
                         });
 
                         var pushData = function (data) {
@@ -168,7 +169,8 @@
                     addNew = function () {
                         var promise1 = $.ajax({
                             url: 'http://api.randomuser.me/',
-                            dataType: 'json'
+                            dataType: 'json',
+                            cache: false
                         });
 
                         promise1.done(function (data) {
