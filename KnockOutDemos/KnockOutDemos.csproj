@@ -244,6 +244,7 @@
     <Content Include="Views\Home\HelloWorld.cshtml" />
     <Content Include="Views\Home\ViewUser1.cshtml" />
     <Content Include="Views\Home\RandomUsers.cshtml" />
+    <Content Include="Views\Home\RandomUsers1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
