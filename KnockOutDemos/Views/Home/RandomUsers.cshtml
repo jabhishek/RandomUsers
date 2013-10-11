@@ -12,6 +12,9 @@
             <input type="button" class="btn btn-success btn-small"
                 data-bind="click: sort, visible: users().length > 0"
                 value="Sort by Name" />
+            <input type="button" class="btn btn-success btn-small"
+                data-bind="click: deleteSelected, visible: selectedUsers().length > 0, value: deleteSelectedButtonText"
+                value="Delete Selected" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
@@ -23,8 +26,8 @@
 <div class="row-fluid">
     <div class="span8" data-bind="visible: users().length > 0">
         <div class="row-fluid" data-bind="foreach: users">
-            <div class="userInfo">
-                <div style="float: left">
+            <div class="userInfo" data-bind="click: $root.selectUser">
+                <div style="float: left; width: 60%">
                     <span data-bind="text: fullName" class="capitalize"></span>
                     <br />
                     <span data-bind="text: gender" class="capitalize"></span>
@@ -34,85 +37,49 @@
                 </div>
                 <div class="imageDiv">
                     <img data-bind="attr: { src: imageUrl }"
-                         style="width: 80px" />
+                        style="width: 80px" />
                 </div>
                 <div style="clear: both"></div>
             </div>
+        </div>
     </div>
-@*    <table class="table table-bordered table-hover table-condensed"
-        style="table-layout: auto">
-        <thead data-bind="visible: users().length > 0">
-            <tr>
-                <th>Gender</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Image</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: users">
-            <tr>
-                <td data-bind="text: gender" class="capitalize"></td>
-                <td data-bind="text: fullName" class="capitalize"></td>
-                <td>
-                    <span data-bind="text: street" class="capitalize"></span>
-                    <br />
-                    <strong>City: </strong><span data-bind="text: city" class="capitalize"></span>
-                    <br />
-                    <strong>Zip: </strong><span data-bind="text: zip" class="capitalize"></span>
-                    <br />
-                    <strong>State: </strong><span data-bind="text: state" class="capitalize"></span>
-                </td>
-                <td class="imagetd">
-                    <img data-bind="attr: { src: imageUrl }"
-                        style="max-width: 20%; min-width: 100px" />
-                </td>
-                <td>
-                    <button data-bind="click: $root.removeUser">
-                        <i class="icon-remove"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>*@
-</div>
-<div class="span4" data-bind="visible: isAdding">
-    <div class="well well-small" id="addUserForm">
-        <form data-bind="submit: submitAdd">
+    <div class="span4" data-bind="visible: isAdding">
+        <div class="well well-small" id="addUserForm">
+            <form data-bind="submit: submitAdd">
 
-            <fieldset>
-                <legend>Add New User</legend>
-
-
-                <h4></h4>
-                Gender:<select id="gender">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select><br />
-                Title:<input type="text" id="title" /><br />
-                First Name:<input type="text" id="first" /><br />
-                Last Name:<input type="text" id="last" /><br />
                 <fieldset>
-                    <legend>Address</legend>
-                    Street:
+                    <legend>Add New User</legend>
+
+
+                    <h4></h4>
+                    Gender:<select id="gender">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select><br />
+                    Title:<input type="text" id="title" /><br />
+                    First Name:<input type="text" id="first" /><br />
+                    Last Name:<input type="text" id="last" /><br />
+                    <fieldset>
+                        <legend>Address</legend>
+                        Street:
                     <input type="text" id="street" /><br />
-                    City:
+                        City:
                     <input type="text" id="city" /><br />
-                    Zip:
+                        Zip:
                     <input type="text" id="zip" /><br />
-                    State:
+                        State:
                     <input type="text" id="state" /><br />
-                </fieldset>
-                Image Url:<input type="text" id="image" /><br />
-                <input type="submit" value="Submit" />
-                <button value="Submit And Add More" data-bind="click: submitAndAddNew">
-                    Submit And Add
+                    </fieldset>
+                    Image Url:<input type="text" id="image" /><br />
+                    <input type="submit" value="Submit" />
+                    <button value="Submit And Add More" data-bind="click: submitAndAddNew">
+                        Submit And Add
                     New</button>
-                <button value="Cancel" data-bind="click: cancelAdd">Cancel</button>
-            </fieldset>
-        </form>
+                    <button value="Cancel" data-bind="click: cancelAdd">Cancel</button>
+                </fieldset>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 @section scripts
 {
@@ -141,6 +108,7 @@
             // The ViewModel
             my.vm = function () {
                 var users = ko.observableArray([]),
+                    selectedUsers = ko.observableArray([]),
                     isAdding = ko.observable(false),
                     loadUsers = function () {
 
@@ -172,6 +140,9 @@
                         });
 
                     },
+                    deleteSelectedButtonText = ko.computed(function () {
+                        return "Delete Selected (" + selectedUsers().length + ")";
+                    }),
                     sort = function () {
                         users.sort(
                             function (left, right) {
@@ -188,6 +159,26 @@
                     },
                     removeUser = function (user) {
                         users.remove(user);
+                    },
+                    deleteSelected = function () {
+                        users.removeAll(selectedUsers());
+                        selectedUsers([]);
+                    },
+                    selectUser = function (user, event) {
+                        var index = selectedUsers.indexOf(user);
+                        if (index != -1)
+                            selectedUsers.remove(user);
+                        else {
+                            selectedUsers.push(user);
+                        }
+
+
+
+                        var $element = $(event.target);
+                        if ($(event.target).hasClass('userInfo'))
+                            $element.toggleClass('selected');
+                        else
+                            $element.parents('.userInfo').toggleClass('selected');
                     },
                     addNew = function () {
                         var promise1 = $.ajax({
@@ -252,14 +243,18 @@
 
                 return {
                     users: users,
+                    selectedUsers: selectedUsers,
                     isAdding: isAdding,
                     loadUsers: loadUsers,
                     sort: sort,
                     removeUser: removeUser,
+                    deleteSelected: deleteSelected,
+                    selectUser: selectUser,
                     addNew: addNew,
                     cancelAdd: cancelAdd,
                     submitAdd: submitAdd,
-                    submitAndAddNew: submitAndAddNew
+                    submitAndAddNew: submitAndAddNew,
+                    deleteSelectedButtonText: deleteSelectedButtonText
                 };
             }();
 
