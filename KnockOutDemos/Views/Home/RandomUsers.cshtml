@@ -4,28 +4,37 @@
 
 <h3>Random Users</h3>
 
+Show: 
+<select data-bind="options: options, selectedOptions: selectedOption">
+</select>
+
 <div class="row-fluid">
     <div class="span12">
-        <div class="span8">
+        <div class="span12">
             <input type="button" class="btn btn-success btn-small" data-bind="click: addNew"
                 value="Add New" />
-            <input type="button" class="btn btn-success btn-small"
-                data-bind="click: sort, visible: users().length > 0"
-                value="Sort by Name" />
             <input type="button" class="btn btn-success btn-small"
                 data-bind="click: deleteSelected, visible: selectedUsers().length > 0, value: deleteSelectedButtonText"
                 value="Delete Selected" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
-                Users listed</strong>
+                Users listed ( 
+                <!--ko text: usersToShow().length-->
+                <!--/ko-->
+                displayed)
+            </strong>
         </div>
         <div style="clear: both"></div>
     </div>
 </div>
 <div class="row-fluid">
-    <div class="span8" data-bind="visible: users().length > 0">
-        <div class="row-fluid" data-bind="foreach: users">
+    <div id="usersDiv" class="span12" data-bind="visible: users().length > 0">
+        <div class="row-fluid" data-bind="template: {
+    foreach: usersToShow,
+    afterAdd: afterAdd,
+    beforeRemove: beforeRemove
+}">
             <div class="userInfo" data-bind="click: $root.selectUser">
                 <div style="float: left; width: 60%">
                     <span data-bind="text: fullName" class="capitalize"></span>
@@ -108,7 +117,20 @@
             // The ViewModel
             my.vm = function () {
                 var users = ko.observableArray([]),
+                    
                     selectedUsers = ko.observableArray([]),
+                    options = ko.observableArray(['male', 'female', 'all']),
+                    selectedOption = ko.observableArray(['female']),
+                    usersToShow = ko.computed(function() {
+                        return ko.utils.arrayFilter(users(),
+                            function (p) {
+                                if (selectedOption()[0] === 'all') {
+                                    return users();
+                                }
+                                return (selectedOption()
+                                    .indexOf(p.gender().toLowerCase()) !== -1);
+                            });
+                    }),
                     isAdding = ko.observable(false),
                     loadUsers = function () {
 
@@ -172,8 +194,6 @@
                             selectedUsers.push(user);
                         }
 
-
-
                         var $element = $(event.target);
                         if ($(event.target).hasClass('userInfo'))
                             $element.toggleClass('selected');
@@ -181,6 +201,8 @@
                             $element.parents('.userInfo').toggleClass('selected');
                     },
                     addNew = function () {
+                        $('#usersDiv').removeClass('span12').addClass('span8');
+
                         var promise1 = $.ajax({
                             url: 'http://api.randomuser.me/',
                             dataType: 'json',
@@ -228,13 +250,21 @@
                                 );
                     },
                     cancelAdd = function (formElement) {
+                        $('#usersDiv').removeClass('span8').addClass('span12');
                         isAdding(false);
                     },
                     submitAdd = function (formElement) {
                         pushUser();
                         sort();
+                        $('#usersDiv').removeClass('span8').addClass('span12');
                         isAdding(false);
                     },
+                    afterAdd = function (elem) {
+                        $(elem).hide().fadeIn('slow');
+                    },
+                     beforeRemove = function (elem) {
+                         $(elem).fadeOut('slow');
+                     },
                     submitAndAddNew = function (formElement) {
                         pushUser();
                         sort();
@@ -243,7 +273,10 @@
 
                 return {
                     users: users,
+                    usersToShow: usersToShow,
                     selectedUsers: selectedUsers,
+                    options: options,
+                    selectedOption: selectedOption,
                     isAdding: isAdding,
                     loadUsers: loadUsers,
                     sort: sort,
@@ -254,7 +287,9 @@
                     cancelAdd: cancelAdd,
                     submitAdd: submitAdd,
                     submitAndAddNew: submitAndAddNew,
-                    deleteSelectedButtonText: deleteSelectedButtonText
+                    deleteSelectedButtonText: deleteSelectedButtonText,
+                    afterAdd: afterAdd,
+                    beforeRemove: beforeRemove
                 };
             }();
 
