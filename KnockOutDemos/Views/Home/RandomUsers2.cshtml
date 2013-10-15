@@ -16,9 +16,6 @@ Show:
             <input type="button" class="btn btn-success btn-small"
                 data-bind="click: deleteSelected, visible: selectedUsers().length > 0, value: deleteSelectedButtonText"
                 value="Delete Selected" />
-            <input type="button" class="btn btn-success btn-small"
-                data-bind="click: showMore"
-                value="Show More" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
@@ -49,8 +46,10 @@ Show:
                     <br />
                 </div>
                 <div class="imageDiv">
+                    @*
                     <img data-bind="attr: { src: imageUrl }"
                         style="width: 80px" />
+*@
                 </div>
                 <div style="clear: both"></div>
             </div>
@@ -118,35 +117,14 @@ Show:
                 });
             };
 
-
-            my.dataService = function () {
-                var getUsers = function () {
-
-                    return $.ajax({
-                        url: 'http://api.randomuser.me/?results=5',
-                        dataType: 'json',
-                        cache: false
-                    });
-
-                };
-                return {
-                    getUsers: getUsers
-                };
-            }();
-
             // The ViewModel
             my.vm = function () {
                 var users = ko.observableArray([]),
 
-                    itemsToShow = ko.observable(20),
-                    showMore = function() {
-                        var count = itemsToShow();
-                        itemsToShow(count + 20);
-                    },
                     selectedUsers = ko.observableArray([]),
                     options = ko.observableArray(['male', 'female', 'all']),
                     selectedOption = ko.observableArray(['all']),
-                    filterByGender = function () {
+                    usersToShow = ko.computed(function () {
                         return ko.utils.arrayFilter(users(),
                             function (p) {
                                 if (selectedOption()[0] === 'all') {
@@ -155,17 +133,6 @@ Show:
                                 return (selectedOption()
                                     .indexOf(p.gender().toLowerCase()) !== -1);
                             });
-                    },
-                    usersToShow = ko.computed(function () {
-                        var filteredArray = ko.utils.arrayFilter(users(),
-                            function (p) {
-                                if (selectedOption()[0] === 'all') {
-                                    return users();
-                                }
-                                return (selectedOption()
-                                    .indexOf(p.gender().toLowerCase()) !== -1);
-                            });
-                        return filteredArray.slice(0, itemsToShow());
                     }),
                     isAdding = ko.observable(false),
                     pushData = function (data) {
@@ -183,21 +150,19 @@ Show:
                             );
                         });
                     },
-                    loadUsers = function (n) {
-                        if (!n)
-                            n = 5;
-                        var promises = [];
-                        var i;
-                        for (i = 1; i <= n; i++) {
-                            promises.push(my.dataService.getUsers());
-                        }
+                    loadUsers = function () {
 
-                        $.each(promises, function () {
-                            this.done(function (data) {
-                                pushData(data);
-                                sort();
-                            });
+                        var promise1 = $.ajax({
+                            url: 'http://api.randomuser.me/?results=5',
+                            dataType: 'json',
+                            cache: false
                         });
+
+                        promise1.done(function (data) {
+                            pushData(data);
+                            //sort();
+                        });
+
                     },
                     deleteSelectedButtonText = ko.computed(function () {
                         return "Delete Selected (" + selectedUsers().length + ")";
@@ -311,8 +276,6 @@ Show:
                 return {
                     users: users,
                     usersToShow: usersToShow,
-                    itemsToShow: itemsToShow,
-                    showMore: showMore,
                     selectedUsers: selectedUsers,
                     options: options,
                     selectedOption: selectedOption,
@@ -332,7 +295,9 @@ Show:
                 };
             }();
 
-            my.vm.loadUsers(50);
+            for (i = 1; i <= 10; i++) {
+                my.vm.loadUsers();
+            }
 
             ko.applyBindings(my.vm);
         });

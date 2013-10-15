@@ -72,7 +72,6 @@ C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Web.WebPages.dll
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Web.WebPages.Razor.dll
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\EntityFramework.xml
-C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\Microsoft.Web.Infrastructure.xml
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\Newtonsoft.Json.xml
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Net.Http.Formatting.xml
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Web.Http.xml
@@ -85,3 +84,10 @@ C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\obj\Debug\KnockOutDemos.csprojResolveAssemblyReference.cache
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\obj\Debug\KnockOutDemos.dll
 C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\obj\Debug\KnockOutDemos.pdb
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\Antlr3.Runtime.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\EntityFramework.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\Newtonsoft.Json.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Web.Optimization.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\System.Web.Providers.dll
+C:\Abhi\VS 2012 Practice Projects\Knockout\RandomUsers\KnockOutDemos\bin\WebGrease.dll
