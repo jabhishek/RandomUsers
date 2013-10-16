@@ -18,8 +18,14 @@ Show:
                 data-bind="click: deleteSelected, visible: selectedUsers().length > 0, value: deleteSelectedButtonText"
                 value="Delete Selected" />
             <input type="button" class="btn btn-success btn-small"
-                data-bind="click: showMore"
+                data-bind="click: showMore, enable: usersToShow().length != filteredUsers().length"
                 value="Show More" />
+            <input type="button" class="btn btn-success btn-small"
+                data-bind="click: showLess, enable: usersToShow().length > 20"
+                value="Show Less" />
+            <input type="button" class="btn btn-success btn-small"
+                data-bind="click: showAll, enable: usersToShow().length != filteredUsers().length"
+                value="Show All" />
             <strong class="pull-right">
                 <!--ko text: users().length-->
                 <!--/ko-->
@@ -164,24 +170,25 @@ Show:
             // The ViewModel
             my.vm = function () {
                 var users = ko.observableArray([]),
+                    selectedUsers = ko.observableArray([]),
+                    filteredUsers = ko.observableArray([]),
                     itemsToShow = ko.observable(20),
                     showMore = function () {
                         var count = itemsToShow();
                         itemsToShow(count + 20);
                     },
-                    selectedUsers = ko.observableArray([]),
+                    showLess = function () {
+                        var count = itemsToShow() - 20;
+                        if (count < 20)
+                            count = 20;
+                        itemsToShow(count);
+                    },
+                    showAll = function () {
+                        itemsToShow(users().length);
+                    },
+
                     options = ko.observableArray(['male', 'female', 'all']),
                     selectedOption = ko.observableArray(['all']),
-                    filterByGender = function () {
-                        return ko.utils.arrayFilter(users(),
-                            function (p) {
-                                if (selectedOption()[0] === 'all') {
-                                    return users();
-                                }
-                                return (selectedOption()
-                                    .indexOf(p.gender().toLowerCase()) !== -1);
-                            });
-                    },
                     usersToShow = ko.computed(function () {
                         var filteredArray = ko.utils.arrayFilter(users(),
                             function (p) {
@@ -191,6 +198,7 @@ Show:
                                 return (selectedOption()
                                     .indexOf(p.gender().toLowerCase()) !== -1);
                             });
+                        filteredUsers(filteredArray);
                         return filteredArray.slice(0, itemsToShow());
                         //return filteredArray;
                     }),
@@ -237,7 +245,7 @@ Show:
                     deleteSelected = function () {
                         users.removeAll(selectedUsers());
                         for (var i = 0; i < selectedUsers().length; i++) {
-                            
+
                         }
                         selectedUsers([]);
                     },
@@ -301,7 +309,7 @@ Show:
                                         .done(
                                             function () {
                                                 users.push(user);
-                                                
+
                                             })
                                         .fail(function () {
                                             console.log("Failed");
@@ -365,9 +373,12 @@ Show:
                 return {
                     seedUsers: seedUsers,
                     users: users,
+                    filteredUsers: filteredUsers,
                     usersToShow: usersToShow,
                     itemsToShow: itemsToShow,
                     showMore: showMore,
+                    showLess: showLess,
+                    showAll: showAll,
                     selectedUsers: selectedUsers,
                     options: options,
                     selectedOption: selectedOption,
@@ -388,7 +399,7 @@ Show:
 
 
             my.vm.loadUsers();
-            //    my.vm.seedUsers(500);
+            //my.vm.seedUsers(100);
 
             ko.applyBindings(my.vm);
         });
