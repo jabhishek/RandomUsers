@@ -4,7 +4,6 @@
 
 <h3>Random Users</h3>
 
-
 Show: 
 <select data-bind="options: options, selectedOptions: selectedOption">
 </select>
@@ -98,6 +97,7 @@ Show:
 @section scripts
 {
     <script>
+
         $(function () {
             var my = {};
 
@@ -121,51 +121,24 @@ Show:
                 var getUsers = function () {
 
                     return $.ajax({
-                        //url: 'http://api.randomuser.me/?results=5',
-                        url: '/api/Users/GetUsers',
+                        url: 'http://api.randomuser.me/?results=5',
+                        //url: '/api/Users/GetUsers',
                         dataType: 'json',
                         cache: false
                     });
 
-
-                },
-                    deleteUser = function (user) {
-                        return $.ajax({
-                            type: "POST",
-                            url: '/api/Users/DeleteUser',
-                            dataType: 'json',
-                            data: user
-                        });
-                    },
-                    writeUser = function (user) {
-                        return $.ajax({
-                            //url: 'http://api.randomuser.me/?results=5',
-                            type: "POST",
-                            url: '/api/Users/WriteUser',
-                            dataType: 'json',
-                            data: user
-                        });
-                    },
-                    getRandomUser = function () {
-                        return $.ajax({
-                            url: 'http://api.randomuser.me/?results=5',
-                            dataType: 'json',
-                            cache: false
-                        });
-                    };
+                };
                 return {
-                    getUsers: getUsers,
-                    deleteUser: deleteUser,
-                    getRandomUser: getRandomUser,
-                    writeUser: writeUser
+                    getUsers: getUsers
                 };
             }();
 
             // The ViewModel
             my.vm = function () {
                 var users = ko.observableArray([]),
+
                     itemsToShow = ko.observable(20),
-                    showMore = function () {
+                    showMore = function() {
                         var count = itemsToShow();
                         itemsToShow(count + 20);
                     },
@@ -192,30 +165,38 @@ Show:
                                     .indexOf(p.gender().toLowerCase()) !== -1);
                             });
                         return filteredArray.slice(0, itemsToShow());
-                        //return filteredArray;
                     }),
                     isAdding = ko.observable(false),
                     pushData = function (data) {
-                        $.each(data, function (i, p) {
+                        $.each(data.results, function (i, p) {
                             users.push(new my.user()
-                                .gender(p.Gender)
-                                .title(p.Title)
-                                .firstName(p.FirstName)
-                                .lastName(p.LastName)
-                                .imageUrl(p.ImageUrl)
-                                .street(p.Street)
-                                .city(p.City)
-                                .state(p.State)
-                                .zip(p.Zip)
+                                .gender(p.user.gender)
+                                .title(p.user.name.title)
+                                .firstName(p.user.name.first)
+                                .lastName(p.user.name.last)
+                                .imageUrl(p.user.picture)
+                                .street(p.user.location.street)
+                                .city(p.user.location.city)
+                                .state(p.user.location.state)
+                                .zip(p.user.location.zip)
                             );
                         });
                     },
-                    loadUsers = function () {
-                        my.dataService.getUsers().done(function (data) {
-                            pushData(data);
-                            sort();
+                    loadUsers = function (n) {
+                        if (!n)
+                            n = 5;
+                        var promises = [];
+                        var i;
+                        for (i = 1; i <= n; i++) {
+                            promises.push(my.dataService.getUsers());
                         }
-                        );
+
+                        $.each(promises, function () {
+                            this.done(function (data) {
+                                pushData(data);
+                                sort();
+                            });
+                        });
                     },
                     deleteSelectedButtonText = ko.computed(function () {
                         return "Delete Selected (" + selectedUsers().length + ")";
@@ -228,17 +209,17 @@ Show:
                                     ? 0 : left.lastName().toLowerCase() < right.lastName().toLowerCase() ? -1 : 1;
                                 if (order == 0) {
                                     order = left.firstName().toLowerCase() == right.firstName().toLowerCase()
-                                        ? 0 : left.firstName().toLowerCase() < right.firstName().toLowerCase() ? -1 : 1;
+                                    ? 0 : left.firstName().toLowerCase() < right.firstName().toLowerCase() ? -1 : 1;
                                 }
                                 return order;
                             }
                         );
                     },
+                    removeUser = function (user) {
+                        users.remove(user);
+                    },
                     deleteSelected = function () {
                         users.removeAll(selectedUsers());
-                        for (var i = 0; i < selectedUsers().length; i++) {
-                            
-                        }
                         selectedUsers([]);
                     },
                     selectUser = function (user, event) {
@@ -280,36 +261,6 @@ Show:
 
                         isAdding(true);
                     },
-                    seedUsers = function (n) {
-                        if (!n)
-                            n = 100;
-                        for (var i = 0; i < n; i++) {
-                            my.dataService.getRandomUser().done(function (data) {
-                                $.each(data.results, function (i, p) {
-                                    var user = new my.user()
-                                        .gender(p.user.gender)
-                                        .title(p.user.name.title)
-                                        .firstName(p.user.name.first)
-                                        .lastName(p.user.name.last)
-                                        .imageUrl(p.user.picture)
-                                        .street(p.user.location.street)
-                                        .city(p.user.location.city)
-                                        .state(p.user.location.state)
-                                        .zip(p.user.location.zip);
-
-                                    my.dataService.writeUser(user)
-                                        .done(
-                                            function () {
-                                                users.push(user);
-                                                
-                                            })
-                                        .fail(function () {
-                                            console.log("Failed");
-                                        });
-                                });
-                            });
-                        }
-                    },
                     pushUser = function () {
                         var $formElement = $('#addUserForm');
                         var title = $formElement.find('#title').val();
@@ -322,23 +273,17 @@ Show:
                         var city = $formElement.find('#city').val();
                         var imageUrl = $formElement.find('#image').val();
 
-                        var user = new my.user()
-                            .gender(gender)
-                            .title(title)
-                            .firstName(name)
-                            .lastName(last)
-                            .imageUrl(imageUrl)
-                            .street(street)
-                            .city(city)
-                            .state(state)
-                            .zip(zip);
-                        my.dataService.writeUser(user).done(
-                            function () {
-                                users.push(user);
-                            }).fail(function () {
-                                console.log("Failed");
-                            });
-
+                        users.push(new my.user()
+                                    .gender(gender)
+                                    .title(title)
+                                    .firstName(name)
+                                    .lastName(last)
+                                    .imageUrl(imageUrl)
+                                    .street(street)
+                                    .city(city)
+                                    .state(state)
+                                    .zip(zip)
+                                );
                     },
                     cancelAdd = function (formElement) {
                         $('#usersDiv').removeClass('span8').addClass('span12');
@@ -363,7 +308,6 @@ Show:
                     };
 
                 return {
-                    seedUsers: seedUsers,
                     users: users,
                     usersToShow: usersToShow,
                     itemsToShow: itemsToShow,
@@ -374,6 +318,7 @@ Show:
                     isAdding: isAdding,
                     loadUsers: loadUsers,
                     sort: sort,
+                    removeUser: removeUser,
                     deleteSelected: deleteSelected,
                     selectUser: selectUser,
                     addNew: addNew,
@@ -386,9 +331,7 @@ Show:
                 };
             }();
 
-
-            my.vm.loadUsers();
-            //    my.vm.seedUsers(500);
+            my.vm.loadUsers(50);
 
             ko.applyBindings(my.vm);
         });
