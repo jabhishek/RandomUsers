@@ -107,20 +107,18 @@ Show:
         $(function () {
             var my = {};
 
-            my.user = function () {
+            my.user = function (gender, title, firstName, lastName, imageUrl, street, city, state, zip) {
                 var self = this;
-                self.gender = ko.observable();
-                self.title = ko.observable();
-                self.firstName = ko.observable();
-                self.lastName = ko.observable();
-                self.imageUrl = ko.observable();
-                self.street = ko.observable();
-                self.city = ko.observable();
-                self.state = ko.observable();
-                self.zip = ko.observable();
-                self.fullName = ko.computed(function () {
-                    return self.title() + " " + self.firstName() + " " + self.lastName();
-                });
+                self.gender = gender;
+                self.title = title;
+                self.firstName = firstName;
+                self.lastName = lastName;
+                self.imageUrl = imageUrl;
+                self.street = street;
+                self.city = city;
+                self.state = state;
+                self.zip = zip;
+                self.fullName = self.title + " " + self.firstName + " " + self.lastName;
             };
 
             my.dataService = function () {
@@ -205,17 +203,8 @@ Show:
                     isAdding = ko.observable(false),
                     pushData = function (data) {
                         $.each(data, function (i, p) {
-                            users.push(new my.user()
-                                .gender(p.Gender)
-                                .title(p.Title)
-                                .firstName(p.FirstName)
-                                .lastName(p.LastName)
-                                .imageUrl(p.ImageUrl)
-                                .street(p.Street)
-                                .city(p.City)
-                                .state(p.State)
-                                .zip(p.Zip)
-                            );
+                            users.push(new my.user(p.Gender, p.Title, p.FirstName,
+                                    p.LastName, p.ImageUrl, p.Street, p.City, p.State, p.Zip));
                         });
                     },
                     loadUsers = function () {
@@ -294,7 +283,9 @@ Show:
                         for (var i = 0; i < n; i++) {
                             my.dataService.getRandomUser().done(function (data) {
                                 $.each(data.results, function (i, p) {
-                                    var user = new my.user()
+                                    var user = new my.user(p.user.Gender, p.user.Title, p.user.FirstName,
+                                        p.user.LastName, p.user.ImageUrl, p.user.Street, p.user.City, p.user.State, p.user.Zip);
+                                   /* var user = new my.user()
                                         .gender(p.user.gender)
                                         .title(p.user.name.title)
                                         .firstName(p.user.name.first)
@@ -303,7 +294,7 @@ Show:
                                         .street(p.user.location.street)
                                         .city(p.user.location.city)
                                         .state(p.user.location.state)
-                                        .zip(p.user.location.zip);
+                                        .zip(p.user.location.zip);*/
 
                                     my.dataService.writeUser(user)
                                         .done(
@@ -329,8 +320,11 @@ Show:
                         var zip = $formElement.find('#zip').val();
                         var city = $formElement.find('#city').val();
                         var imageUrl = $formElement.find('#image').val();
-
-                        var user = new my.user()
+                        
+                        var user = new my.user(gender, title, firstName,
+                                        lastName, imageUrl, street, city, state, zip);
+                        
+                 /*       var user = new my.user()
                             .gender(gender)
                             .title(title)
                             .firstName(name)
@@ -339,7 +333,7 @@ Show:
                             .street(street)
                             .city(city)
                             .state(state)
-                            .zip(zip);
+                            .zip(zip);*/
                         my.dataService.writeUser(user).done(
                             function () {
                                 users.push(user);
