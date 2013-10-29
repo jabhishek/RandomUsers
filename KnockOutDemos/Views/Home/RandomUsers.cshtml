@@ -170,7 +170,7 @@ Show:
                 var users = ko.observableArray([]),
                     selectedUsers = ko.observableArray([]),
                     filteredUsers = ko.observableArray([]),
-                    itemsToShow = ko.observable(20),
+                    itemsToShow = ko.observable(),
                     showMore = function () {
                         var count = itemsToShow();
                         itemsToShow(count + 20);
@@ -188,6 +188,8 @@ Show:
                     options = ko.observableArray(['male', 'female', 'all']),
                     selectedOption = ko.observableArray(['all']),
                     usersToShow = ko.computed(function () {
+                        console.time("filter1");
+                        console.time("filter2");
                         var filteredArray = ko.utils.arrayFilter(users(),
                             function (p) {
                                 if (selectedOption()[0] === 'all') {
@@ -196,21 +198,37 @@ Show:
                                 return (selectedOption()
                                     .indexOf(p.gender().toLowerCase()) !== -1);
                             });
+                        console.timeEnd("filter1");
                         filteredUsers(filteredArray);
-                        return filteredArray.slice(0, itemsToShow());
+                        console.timeEnd("filter2");
+
+                        if (itemsToShow()) {
+                            return filteredArray.slice(0, itemsToShow());
+                        } else {
+                            return filteredArray;
+                        }
+                        //return filteredArray.slice(0, itemsToShow());
                         //return filteredArray;
                     }),
                     isAdding = ko.observable(false),
                     pushData = function (data) {
+                        var userArray = users();
                         $.each(data, function (i, p) {
-                            users.push(new my.user(p.Gender, p.Title, p.FirstName,
+                            userArray.push(new my.user(p.Gender, p.Title, p.FirstName,
                                     p.LastName, p.ImageUrl, p.Street, p.City, p.State, p.Zip));
                         });
+                        users.valueHasMutated();
                     },
                     loadUsers = function () {
+                        console.time("Loading Data");
+                        console.time("Showing Data");
+                        console.time("Sorting Data");
                         my.dataService.getUsers().done(function (data) {
+                            console.timeEnd("Loading Data");
                             pushData(data);
+                            console.timeEnd("Showing Data");
                             sort();
+                            console.timeEnd("Sorting Data");
                         }
                         );
                     },
@@ -221,11 +239,11 @@ Show:
                         users.sort(
                             function (left, right) {
                                 var order = 0;
-                                order = left.lastName().toLowerCase() == right.lastName().toLowerCase()
-                                    ? 0 : left.lastName().toLowerCase() < right.lastName().toLowerCase() ? -1 : 1;
+                                order = left.lastName.toLowerCase() == right.lastName.toLowerCase()
+                                    ? 0 : left.lastName.toLowerCase() < right.lastName.toLowerCase() ? -1 : 1;
                                 if (order == 0) {
-                                    order = left.firstName().toLowerCase() == right.firstName().toLowerCase()
-                                        ? 0 : left.firstName().toLowerCase() < right.firstName().toLowerCase() ? -1 : 1;
+                                    order = left.firstName.toLowerCase() == right.firstName.toLowerCase()
+                                        ? 0 : left.firstName.toLowerCase() < right.firstName.toLowerCase() ? -1 : 1;
                                 }
                                 return order;
                             }
