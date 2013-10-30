@@ -214,6 +214,11 @@
     <Content Include="Content\loader.less" />
     <None Include="Content\Site.less" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Scripts\App\ColourPicker\bh-slider.js" />
+    <Content Include="Scripts\App\ColourPicker\viewmodel.js" />
+    <Content Include="Scripts\App\Common\dump.js" />
+    <Content Include="Scripts\App\ColourPicker\increment.js" />
+    <Content Include="Scripts\App\Common\ko-delegatedEvents.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -251,6 +256,7 @@
     <Content Include="Views\Home\RandomUsers1.cshtml" />
     <Content Include="Views\Home\RandomUsers2.cshtml" />
     <Content Include="Views\Home\RandomUsers3.cshtml" />
+    <Content Include="Views\Home\ColourPicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

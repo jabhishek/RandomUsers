@@ -32,5 +32,10 @@ namespace KnockOutDemos.Controllers
         {
             return View();
         }
+
+        public ActionResult ColourPicker()
+        {
+            return View();
+        }
     }
 }
