@@ -7,12 +7,22 @@
 
         $element.on('click', function () {
             var currentValue = accessor();
-            if (currentValue) {
+            if (currentValue !== null && currentValue !== undefined ) {
                 var newValue = currentValue + incrementBy;
-                if (newValue <= 255)
-                    accessor(currentValue + incrementBy);
-                else {
-                    accessor(255);
+                if (incrementBy > 0) {
+                    if (newValue <= 255)
+                        accessor(currentValue + incrementBy);
+                    else {
+                        accessor(255);
+                    }
+                }
+                
+                if (incrementBy < 0) {
+                    if (newValue >= 0)
+                        accessor(currentValue + incrementBy);
+                    else {
+                        accessor(0);
+                    }
                 }
             }
         });

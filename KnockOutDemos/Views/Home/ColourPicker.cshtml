@@ -15,37 +15,31 @@
     <title>ColourPicker</title>
 
     <style>
-        #customDiv
-        {
+        #customDiv {
             height: 100px;
             width: 100px;
             margin: 10px;
         }
 
-        #red, #green, #blue
-        {
+        #red, #green, #blue {
             margin: 10px;
             width: 300px;
             float: left;
         }
 
-        #red
-        {
+        #red {
             background: #FD3938;
         }
 
-        #green
-        {
+        #green {
             background: #78FE7A;
         }
 
-        #blue
-        {
+        #blue {
             background: #6464FE;
         }
 
-        #slidersDiv .btn-group
-        {
+        #slidersDiv .btn-group {
             float: left;
             margin-right: 20px;
         }
@@ -57,23 +51,26 @@
         <div style="float: left; width: 50%" class="well well-large" id="slidersDiv">
             <div>
                 <div class="btn-group">
-                    <button class="btn btn-small" data-bind="click: upRed"><span class="icon-chevron-up"></span></button>
-                    <button class="btn btn-small" data-bind="click: downRed"><span class="icon-chevron-down"></span></button>
+                    <span class="btn btn-small" data-bind="click: upRed"><span class="icon-chevron-up"></span></span>
+                    <span class="btn btn-small" data-bind="click: downRed"><span class="icon-chevron-down"></span></span>
                 </div>
                 <div id="red" data-bind="slider: red"></div>
                 <div style="clear: both"></div>
 
             </div>
             <div>
-                @*<input type="number" data-bind="value: green, valueUpdate: 'afterkeydown'" />*@
                 <div class="btn-group">
                     <button class="btn btn-small" data-bind="increment: green, step: 10"><span class="icon-chevron-up"></span></button>
-                    <button class="btn btn-small" data-bind="click: downRed"><span class="icon-chevron-down"></span></button>
+                    <button class="btn btn-small" data-bind="increment: green, step: -10"><span class="icon-chevron-down"></span></button>
                 </div>
                 <div id="green" data-bind="    slider: green"></div>
                 <div style="clear: both"></div>
             </div>
             <div>
+                <div class="btn-group">
+                    <button class="btn btn-small" data-bind="increment: blue, step: 10"><span class="icon-chevron-up"></span></button>
+                    <button class="btn btn-small" data-bind="increment: blue, step: -10"><span class="icon-chevron-down"></span></button>
+                </div>
                 <div id="blue" data-bind="    slider: blue"></div>
                 <div style="clear: both"></div>
             </div>
@@ -82,7 +79,6 @@
         <div class="well well-small" style="float: left" id="customDiv" data-bind="style: { background: hexColor, opacity: opacity }"></div>
         <div style="clear: both"></div>
     </div>
-    <!-- <div id="customDiv" data-bind="style : {background: hexColor, opacity: opacity}"></div> -->
 
     <script src="//ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
     <script src="~/Scripts/App/Common/dump.js"></script>
